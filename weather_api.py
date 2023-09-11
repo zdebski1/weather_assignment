@@ -10,26 +10,37 @@ Temperature in Kelvin and wind speed in meter/sec is used by default, so there i
  
 '''
 
-from fastapi import APIRouter, HTTPException, status
-import httpx # used to determine the status of a request
 
+from fastapi import APIRouter, HTTPException, status
+import httpx
+from pydantic import BaseModel, Field
 
 router = APIRouter()
 
-@router.get('/zipcode/{zipcode}', status_code=status.HTTP_200_OK) 
+# class weather_data(BaseModel):
+#     zipcode: str = Field(min_length=5, max_length=5)
+#     units: str
+#     api_key: str
+
+
+@router.get('/zipcode/{zipcode}', status_code=status.HTTP_200_OK)
 async def get_weather_by_zipcode(zip_code: str, units: str, api_key: str):
+
+    if units not in ["imperial", "metric", "standard"]:
+        raise HTTPException(status_code=400, detail='Please use imperial, metric, or standard')
+
     url = f"http://api.openweathermap.org/data/2.5/weather?zip={zip_code}&units={units}&appid={api_key}"
     try:
         async with httpx.AsyncClient() as client:
-            openmap_response = await client.get(url) # wait for the response
-            openmap_response.raise_for_status() # raise the http status if a problem occurs
+            openmap_response = await client.get(url)
+            openmap_response.raise_for_status()
 
-            weather_data = openmap_response.json() #return the resposne as a dictionary
+            weather_data = openmap_response.json()
             temp = weather_data.get("main", {}).get("temp")
 
             if temp is not None:
-                return {f"The temperature in Fahrenheit for {zip_code} is:": temp}
-            else: 
+                return {f"The temperature in {units} units for {zip_code} is:": temp}
+            else:
                 raise HTTPException(status_code=404, detail='Source not found')
 
     except httpx.HTTPError:
