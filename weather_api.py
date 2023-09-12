@@ -43,5 +43,5 @@ async def get_weather_by_zipcode(zip_code: str, units: str, api_key: str):
             else:
                 raise HTTPException(status_code=404, detail='Source not found')
 
-    except httpx.HTTPError:
+    except:
         HTTPException(status_code=500, detail='Cannot connect to server')
