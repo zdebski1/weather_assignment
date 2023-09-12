@@ -20,7 +20,7 @@ class weather_data(BaseModel): # create a class using pydantics to insure that t
 async def main():
     zip_code = input('Zipcode: ')
     units = input('Unit of measurement: ')
-    api_key = '2cad35927d4cc9b4f8b0d5077090f6dd'  #input('personal token: ')
+    api_key = input('personal token: ')
 
     data = weather_data(zip_code=zip_code, units=units, api_key=api_key)
     temperature = await weather_api.get_weather_by_zipcode(data.zip_code, data.units, data.api_key)
