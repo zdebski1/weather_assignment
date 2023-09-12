@@ -18,11 +18,16 @@ jobs:
       with:
         python-version: 3.11.1
 
-    - name: Install Requirements
-      run: |
-        pip install -r main/requirements.txt
+    # - name: Install Requirements
+    #   run: |
+    #     pip install -r requirements.txt
 
         
     # - name: Run test 
     #   run: |
     #     pytest weather_api/tests
+    
+    - name: Run Api
+      run: |
+        weather_api.py
+        diagram.py
