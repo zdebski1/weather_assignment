@@ -27,6 +27,6 @@ jobs:
     #   run: |
     #     pytest weather_api/tests
 
-    - name: Build Project
-      run: |
-        diagram.py
+    # - name: Build Project
+    #   run: |
+    #     diagram.py
